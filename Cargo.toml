@@ -1,0 +1,6 @@
+[package]
+name = "Rust-Java-Import-Order"
+version = "0.1.0"
+authors = ["Prashant Khurana <pkhurana@dstillery.com>"]
+
+[dependencies]
