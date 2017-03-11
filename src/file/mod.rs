@@ -48,17 +48,19 @@ pub fn get_file_names_in_directory3(path : &str, mut file_names:Vec<String>) -> 
         let y:DirEntry = try!(directory_content);
         let x:Metadata = try!(y.metadata());
         if x.is_dir() {
-            println!("is dir");
-            println!("{:?} ",y.path());
+            //println!("is dir");
+            //println!("{:?} ",y.path());
             file_names = try!(get_file_names_in_directory3(y.path().to_str().unwrap(), file_names));
         } else {
-            println!("none");
-            println!("{:?} ",y.path());
+            // println!("none");
+            // println!("{:?} ",y.path());
             match y.path().extension() {
-                None => println!("{:?}", y.path()),
+                None => {
+                
+                },
                 Some(i) => {
-                    println!("ddddddd {:?}", i.to_str().unwrap());
-                    if i.to_str().unwrap().starts_with("rs") {
+                    //println!("ddddddd {:?}", i.to_str().unwrap());
+                    if i.to_str().unwrap().starts_with("java") {
                     file_names.push(y.path().to_str().unwrap().to_string());
                     }
                 },
