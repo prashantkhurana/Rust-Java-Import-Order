@@ -15,7 +15,8 @@ use std::ops::FnMut;
 
 fn main() {
     //fix_import_order2();
-    read_and_fix_temp("/Users/PKhurana/opt/m6d/adserv-a1/adserv-serviceLayer/src/main/java/com/dstillery/adserv/feature/creative/filter/CreativePropertyFilter.java");
+    println!("{:?}", 0.cmp(&1));
+    read_and_fix_temp("/Users/PKhurana/code/Rust-Java-Import-Order/CreativePropertyFilter.java");
     // println!("test {}" ,file::hello());
     // println!("Hello, world!");
     // let file_names:Vec<DirEntry> = file::get_file_names_in_directory2("/Users/PKhurana/code/Rust-Java-Import-Order").unwrap();
@@ -71,7 +72,11 @@ fn read_and_fix_temp(file_name:&str) -> Result<(i32), Error> {
                 v.push(c);
             }
         }
-        v.sort_by(Point::total_cmp);
+        //v.sort_by(Point::total_cmp);
+        println!("{:?}", v);    
+
+        v.sort_by(|a,b| a.total_cmp(b));
+
         println!("{:?}", v);    
         // println!("file_contents {:?}", file_contents);
         // let mut s:String = String::new();
@@ -87,14 +92,40 @@ struct Point {
 }
 
 impl Point {
+
+    fn getList() -> Vec<String>  {
+        let mut v:Vec<String> = Vec::new();
+        v.push(String::from("import static"));
+        v.push(String::from("import java."));
+        v.push(String::from("import javax."));
+        v.push(String::from("import org."));
+        v.push(String::from("import com."));
+        v
+    }
+
     fn total_cmp(&self, rhs: &Self) -> Ordering {
-        // match (self.total_ord(rhs), rhs.total_ord(self)) {
-        //     (true, false) => Ordering::Less,
-        //     (false, true) => Ordering::Greater,
-        //     (true, true) => Ordering::Equal,
-        //     _ => panic!("could not order {:?}, {:?}", self, rhs)
-        // }
-        Ordering::Greater
+        let c = Point::getList();
+        let mut i = 0;
+        let mut selfi = 5;
+        let mut rhsi = 5;
+        // let x = *rhs.ge
+         for st in &Point::getList() {
+             if self.x.starts_with(st) {
+                 selfi = i;
+             }
+             if rhs.x.starts_with(st) {
+                 rhsi = i;
+             }
+            i = i + 1;
+         }
+
+         println!("{} {} {} {}",self.x, selfi, rhs.x, rhsi);
+
+         if selfi == rhsi {
+             self.x.cmp(&rhs.x)
+         } else {
+             selfi.cmp(&rhsi)
+         }
     }
 }
 
