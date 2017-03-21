@@ -103,7 +103,7 @@ use std::io::Write;
             //file_contents2.write_all(l.as_bytes());
             //file_contents2.write(b"\n").unwrap();
             //writeln!(file_contents2, l.as_bytes());
-            println!("{}", l);
+            //println!("{}", l);
             if l.starts_with("import") {
                 let c = Point { x:l };
                 v.push(c);
@@ -117,7 +117,9 @@ use std::io::Write;
             }
         }
 
+        println!("{:?}", v);    
         v.sort_by(Point::total_cmp);
+        let v = add_new_line(v);
 
         //let mut file = BufReader::new(file_contents);
         //file_contents2.write_all(b);
@@ -134,7 +136,9 @@ use std::io::Write;
                 print!("new line found");
             }
              file_contents2.write_all(l.as_bytes());
+             if l != "\n" {
              file_contents2.write(b"\n").unwrap();   
+            }
              //println!("{}", line2);
          }
 
@@ -156,6 +160,46 @@ use std::io::Write;
         // file_contents.read_to_string(& mut s);
         // println!("s {}", s);
         Ok(2)
+}
+
+fn add_new_line(v1 : Vec<Point>) -> Vec<Point>{
+
+    let mut old :i32 = -1;
+    let mut new :i32 = -1;
+    let mut v:Vec<Point> = Vec::new();
+
+
+    for line2 in v1 {
+            new = getI(&line2);
+            if old != new && old != -1 {
+               let c: Point = Point{x :String::from("\n")};
+               v.push(c);
+            }
+            v.push(line2);
+            old = new;
+
+            // if l == "\n" {
+            //     print!("new line found");
+            // }
+
+            //  file_contents2.write_all(l.as_bytes());
+            //  file_contents2.write(b"\n").unwrap();   
+             //println!("{}", line2);
+         }
+    v
+}
+
+fn getI(point : &Point) -> i32 {
+    let mut selfi:i32 = 5;
+    let mut i:i32 = 0;
+
+    for st in &Point::getList() {
+             if point.x.starts_with(st) {
+                 selfi = i;
+             }
+            i = i + 1;
+         }
+         selfi
 }
 
 use std::cmp::Ordering;
