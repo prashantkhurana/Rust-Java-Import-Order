@@ -11,12 +11,13 @@ use std::io::BufReader;
 use std::io::BufRead;
 use std::vec;
 use std::ops::FnMut;
+use std::io::Write;
 
 
 fn main() {
     //fix_import_order2();
-    println!("{:?}", 0.cmp(&1));
-    read_and_fix_temp("/Users/PKhurana/code/Rust-Java-Import-Order/CreativePropertyFilter.java");
+    //println!("{:?}", 0.cmp(&1));
+    read_and_fix_temp2("/Users/PKhurana/code/Rust-Java-Import-Order/CreativePropertyFilter2.java");
     // println!("test {}" ,file::hello());
     // println!("Hello, world!");
     // let file_names:Vec<DirEntry> = file::get_file_names_in_directory2("/Users/PKhurana/code/Rust-Java-Import-Order").unwrap();
@@ -66,8 +67,8 @@ fn read_and_fix_temp(file_name:&str) -> Result<(i32), Error> {
         let mut v:Vec<Point> = Vec::new();
         for line in file.lines() {
             let l:String = line.unwrap();
+            println!("{}", l);
             if l.starts_with("import") {
-                println!("{}", l);
                 let c = Point { x:l };
                 v.push(c);
             }
@@ -78,6 +79,78 @@ fn read_and_fix_temp(file_name:&str) -> Result<(i32), Error> {
         v.sort_by(|a,b| a.total_cmp(b));
 
         println!("{:?}", v);    
+        // println!("file_contents {:?}", file_contents);
+        // let mut s:String = String::new();
+        // file_contents.read_to_string(& mut s);
+        // println!("s {}", s);
+        Ok(2)
+}
+
+fn read_and_fix_temp2(file_name:&str) -> Result<(i32), Error> {
+
+        let mut file_contents:File = try!(File::open(file_name));
+        let mut file = BufReader::new(file_contents);
+        let mut v:Vec<Point> = Vec::new();
+        let mut b:Vec<String> = Vec::new();
+        let mut a:Vec<String> = Vec::new();
+
+        let mut file_contents2:File = try!(File::create("/Users/PKhurana/code/Rust-Java-Import-Order/test.java"));
+        //fs::copy("foo.txt", "bar.txt")?;  // Copy foo.txt to bar.txt
+use std::io::Write;
+
+        for line in file.lines() {
+            let mut l:String = line.unwrap();
+            //file_contents2.write_all(l.as_bytes());
+            //file_contents2.write(b"\n").unwrap();
+            //writeln!(file_contents2, l.as_bytes());
+            println!("{}", l);
+            if l.starts_with("import") {
+                let c = Point { x:l };
+                v.push(c);
+                l = String::from("222");
+            } else if v.len() == 0 {
+                b.push(l);
+            } else if l.eq("\n") && a.len() == 0 {
+                //println!("ignore");
+            } else {
+                a.push(l);
+            }
+        }
+
+        v.sort_by(Point::total_cmp);
+
+        //let mut file = BufReader::new(file_contents);
+        //file_contents2.write_all(b);
+        for line2 in b {
+            //let mut l:String = line2;
+            file_contents2.write_all(line2.as_bytes());
+            file_contents2.write(b"\n").unwrap();
+            //println!("{}", line2);
+        }
+
+         for line2 in v {
+            let mut l:String = line2.x;
+            if l == "\n" {
+                print!("new line found");
+            }
+             file_contents2.write_all(l.as_bytes());
+             file_contents2.write(b"\n").unwrap();   
+             //println!("{}", line2);
+         }
+
+        for line2 in a {
+            //let mut l:String = line2;
+            file_contents2.write_all(line2.as_bytes());
+            file_contents2.write(b"\n").unwrap();   
+            //println!("{}", line2);
+        }
+
+
+        //println!("{:?}", v);    
+
+        //v.sort_by(|a,b| a.total_cmp(b));
+
+        //println!("{:?}", v);  
         // println!("file_contents {:?}", file_contents);
         // let mut s:String = String::new();
         // file_contents.read_to_string(& mut s);
@@ -119,7 +192,7 @@ impl Point {
             i = i + 1;
          }
 
-         println!("{} {} {} {}",self.x, selfi, rhs.x, rhsi);
+         //println!("{} {} {} {}",self.x, selfi, rhs.x, rhsi);
 
          if selfi == rhsi {
              self.x.cmp(&rhs.x)
