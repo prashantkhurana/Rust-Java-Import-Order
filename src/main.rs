@@ -74,12 +74,12 @@ fn read_and_fix(file_name:String) -> Result<(i32), Error> {
 fn read_and_fix_temp(file_name:&str) -> Result<(i32), Error> {
         let mut file_contents:File = try!(File::open(file_name));
         let mut file = BufReader::new(file_contents);
-        let mut v:Vec<Point> = Vec::new();
+        let mut v:Vec<line_of_code> = Vec::new();
         for line in file.lines() {
             let l:String = line.unwrap();
             println!("{}", l);
             if l.starts_with("import") {
-                let c = Point { x:l };
+                let c = line_of_code { line:l };
                 v.push(c);
             }
         }
@@ -114,7 +114,7 @@ fn read_and_fix_temp2(file_name:&str) -> Result<(i32), Error> {
         // println!("dddd{:?}", buffer);
 
         let mut file = BufReader::new(file_contents);
-        let mut v:Vec<Point> = Vec::new();
+        let mut v:Vec<line_of_code> = Vec::new();
         let mut b:Vec<String> = Vec::new();
         let mut a:Vec<String> = Vec::new();
 
@@ -130,7 +130,7 @@ use std::io::SeekFrom;
             //writeln!(file_contents2, l.as_bytes());
             //println!("{}", num);
             if l.starts_with("import") {
-                let c = Point { x:l };
+                let c = line_of_code { line:l };
                 v.push(c);
                 l = String::from("222");
             } else if v.len() == 0 {
@@ -143,7 +143,7 @@ use std::io::SeekFrom;
         }
 
         println!("a is {:?}", a);    
-        v.sort_by(Point::total_cmp);
+        v.sort_by(line_of_code::total_cmp);
         let v = add_new_line(v);
 
         //let mut file = BufReader::new(file_contents);
@@ -173,7 +173,7 @@ use std::io::SeekFrom;
 
 
          for line2 in v {
-            let mut l:String = line2.x;
+            let mut l:String = line2.line;
             if l == "\n" {
                 //print!("new line found");
             }
@@ -213,17 +213,17 @@ use std::io::SeekFrom;
         Ok(2)
 }
 
-fn add_new_line(v1 : Vec<Point>) -> Vec<Point>{
+fn add_new_line(v1 : Vec<line_of_code>) -> Vec<line_of_code>{
 
     let mut old :i32 = -1;
     let mut new :i32 = -1;
-    let mut v:Vec<Point> = Vec::new();
+    let mut v:Vec<line_of_code> = Vec::new();
 
 
     for line2 in v1 {
             new = getI(&line2);
             if old != new && old != -1 {
-               let c: Point = Point{x :String::from("\n")};
+               let c: line_of_code = line_of_code { line:String::from("\n")};
                v.push(c);
             }
             v.push(line2);
@@ -240,12 +240,12 @@ fn add_new_line(v1 : Vec<Point>) -> Vec<Point>{
     v
 }
 
-fn getI(point : &Point) -> i32 {
+fn getI(point : &line_of_code) -> i32 {
     let mut selfi:i32 = 5;
     let mut i:i32 = 0;
 
-    for st in &Point::getList() {
-             if point.x.starts_with(st) {
+    for st in &line_of_code::getList() {
+             if point.line.starts_with(st) {
                  selfi = i;
              }
             i = i + 1;
@@ -255,11 +255,11 @@ fn getI(point : &Point) -> i32 {
 
 use std::cmp::Ordering;
 #[derive(Debug)]
-struct Point {
-    x: String,
+struct line_of_code {
+    line: String,
 }
 
-impl Point {
+impl line_of_code {
 
     fn getList() -> Vec<String>  {
         let mut v:Vec<String> = Vec::new();
@@ -272,16 +272,16 @@ impl Point {
     }
 
     fn total_cmp(&self, rhs: &Self) -> Ordering {
-        let c = Point::getList();
+        let c = line_of_code::getList();
         let mut i = 0;
         let mut selfi = 5;
         let mut rhsi = 5;
         // let x = *rhs.ge
-         for st in &Point::getList() {
-             if self.x.starts_with(st) {
+         for st in &line_of_code::getList() {
+             if self.line.starts_with(st) {
                  selfi = i;
              }
-             if rhs.x.starts_with(st) {
+             if rhs.line.starts_with(st) {
                  rhsi = i;
              }
             i = i + 1;
@@ -290,12 +290,12 @@ impl Point {
          //println!("{} {} {} {}",self.x, selfi, rhs.x, rhsi);
 
          if selfi == rhsi {
-             if self.x.starts_with(&rhs.x[..rhs.x.len()-1]) {
+             if self.line.starts_with(&rhs.line[..rhs.line.len()-1]) {
                  Ordering::Greater
-             } else  if rhs.x.starts_with(&self.x[..self.x.len()-1]) {
+             } else  if rhs.line.starts_with(&self.line[..self.line.len()-1]) {
                  Ordering::Less
              } else {
-                self.x.cmp(&rhs.x)
+                self.line.cmp(&rhs.line)
              }
          } else {
              selfi.cmp(&rhsi)
