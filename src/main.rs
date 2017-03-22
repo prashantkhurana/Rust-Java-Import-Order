@@ -1,24 +1,18 @@
 mod file;
 
-use std::fs::DirEntry;
 use std::fs;
-use std::path::Path;
 use std::io::Error;
-use std::fs::Metadata;
 use std::fs::File;
 use std::io::Read;
 use std::io::BufReader;
 use std::io::BufRead;
-use std::vec;
-use std::ops::FnMut;
-use std::io::Write;
-use file::file_contents::line_of_code;
+use file::file_contents::LineOfCode;
 
 
 fn main() {
     match fix_import_order2() {
-        Ok(v) => print!("okay"),
-        Err(s) => print!("error"),
+        Ok(v) => print!("works!"),
+        Err(s) => print!("error {}", s)
     };
     //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-serviceLayer/src/main/java/com/dstillery/duffman/converter/BidSummaryConverter.java");
     ()
@@ -48,7 +42,7 @@ fn read_and_fix_temp2(file_name:&str) -> Result<(i32), Error> {
         let mut file_contents:File = try!(File::open(file_name));
 
         let mut file = BufReader::new(file_contents);
-        let mut v:Vec<line_of_code> = Vec::new();
+        let mut v:Vec<LineOfCode> = Vec::new();
         let mut b:Vec<String> = Vec::new();
         let mut a:Vec<String> = Vec::new();
 
@@ -59,7 +53,7 @@ use std::io::SeekFrom;
         for (num, line) in file.lines().enumerate() {
             let mut l:String = line.unwrap();
             if l.starts_with("import") {
-                let c = line_of_code { line:l };
+                let c = LineOfCode { line:l };
                 v.push(c);
                 l = String::from("222");
             } else if v.len() == 0 {
@@ -72,7 +66,7 @@ use std::io::SeekFrom;
         }
 
         println!("a is {:?}", a);    
-        v.sort_by(line_of_code::total_cmp);
+        v.sort_by(LineOfCode::total_cmp);
         let v = add_new_line(v);
 
 
@@ -120,17 +114,17 @@ use std::io::SeekFrom;
         Ok(2)
 }
 
-fn add_new_line(v1 : Vec<line_of_code>) -> Vec<line_of_code>{
+fn add_new_line(v1 : Vec<LineOfCode>) -> Vec<LineOfCode>{
 
     let mut old :i32 = -1;
     let mut new :i32 = -1;
-    let mut v:Vec<line_of_code> = Vec::new();
+    let mut v:Vec<LineOfCode> = Vec::new();
 
 
     for line2 in v1 {
             new = getI(&line2);
             if old != new && old != -1 {
-               let c: line_of_code = line_of_code { line:String::from("\n")};
+               let c: LineOfCode = LineOfCode { line:String::from("\n")};
                v.push(c);
             }
             v.push(line2);
@@ -139,11 +133,11 @@ fn add_new_line(v1 : Vec<line_of_code>) -> Vec<line_of_code>{
     v
 }
 
-fn getI(point : &line_of_code) -> i32 {
+fn getI(point : &LineOfCode) -> i32 {
     let mut selfi:i32 = 5;
     let mut i:i32 = 0;
 
-    for st in &line_of_code::getList() {
+    for st in &LineOfCode::get_list() {
              if point.line.starts_with(st) {
                  selfi = i;
              }
