@@ -1,4 +1,3 @@
-mod file;
 
 use std::fs;
 use std::fs::ReadDir;
