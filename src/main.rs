@@ -7,30 +7,32 @@ use std::io::Read;
 use std::io::BufReader;
 use std::io::BufRead;
 use file::file_contents::LineOfCode;
+use std::io::Write;
 
 
 fn main() {
-    match fix_import_order2() {
+    match fix_import_order() {
         Ok(_) => print!("works!"),
         Err(s) => print!("error {}", s)
     };
+    // for running for an individual file
     //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-serviceLayer/src/main/java/com/dstillery/duffman/converter/BidSummaryConverter.java");
     ()
 }
 
-fn fix_import_order2() -> Result<(i32), Error> {
+fn fix_import_order() -> Result<(i32), Error> {
     let file_names:Vec<String> = Vec::new();
     let file_names:Vec<String> = file::get_file_names_in_directory3("/Users/PKhurana/opt/m6d/adserv-a1", file_names).unwrap();
     println!("final paths of all files {:?}", file_names);
 
     for file_name in file_names {
-        try!(read_and_fix_temp2(&file_name));
+        try!(read_file_and_fix_import(&file_name));
     }
     Ok(1)
 }
 
 
-fn read_and_fix_temp2(file_name:&str) -> Result<(i32), Error> {
+fn read_file_and_fix_import(file_name:&str) -> Result<(i32), Error> {
 
         let mut file_contents:File = try!(File::open(file_name));
         let mut contents = String::new();
@@ -47,7 +49,7 @@ fn read_and_fix_temp2(file_name:&str) -> Result<(i32), Error> {
         let mut a:Vec<String> = Vec::new();
 
         let mut file_contents2:File = try!(File::create("/Users/PKhurana/code/Rust-Java-Import-Order/test.java"));
-use std::io::Write;
+
         for line in file.lines() {
             let l:String = line.unwrap();
             if l.starts_with("import") {
