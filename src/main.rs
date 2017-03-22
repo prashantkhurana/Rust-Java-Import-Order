@@ -15,9 +15,18 @@ use std::io::Write;
 
 
 fn main() {
-    //fix_import_order2();
+    match fix_import_order2() {
+        Ok(v) => print!("okay"),
+        Err(s) => print!("error"),
+    };
     //println!("{:?}", 0.cmp(&1));
-    read_and_fix_temp2("/Users/PKhurana/code/Rust-Java-Import-Order/CreativePropertyFilter2.java");
+    //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-serviceLayer/src/main/java/com/dstillery/duffman/converter/BidSummaryConverter.java");
+    //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-dataLayer/src/main/java/com/dstillery/dao/campaign/CampaignActionTrackerDao.java");
+    //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-dataLayer/src/main/java/com/media6/dao/AgencyDao.java");
+    //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-dataLayer/src/test/java/com/media6/adserv/datalayer/hibernate/JacksonJsonTypeTest.java");
+
+
+
     // println!("test {}" ,file::hello());
     // println!("Hello, world!");
     // let file_names:Vec<DirEntry> = file::get_file_names_in_directory2("/Users/PKhurana/code/Rust-Java-Import-Order").unwrap();
@@ -43,11 +52,12 @@ fn fix_import_order() -> Result<(i32), Error> {
 fn fix_import_order2() -> Result<(i32), Error> {
     let mut file_names:Vec<String> = Vec::new();
     let file_names:Vec<String> = file::get_file_names_in_directory3("/Users/PKhurana/opt/m6d/adserv-a1", file_names).unwrap();
-    //println!("final paths of all files {:?}", file_names);
+    //let file_names:Vec<String> = file::get_file_names_in_directory3("/Users/PKhurana/opt/m6d/adserv-a1/adserv-serviceLayer/src/main/java/com/dstillery/duffman/converter", file_names).unwrap();
+    println!("final paths of all files {:?}", file_names);
 
     for file_name in file_names {
-        read_and_fix(file_name);
-        return Ok(2);
+        read_and_fix_temp2(&file_name);
+        //return Ok(2);
     }
     Ok(3)
 }
@@ -89,6 +99,20 @@ fn read_and_fix_temp(file_name:&str) -> Result<(i32), Error> {
 fn read_and_fix_temp2(file_name:&str) -> Result<(i32), Error> {
 
         let mut file_contents:File = try!(File::open(file_name));
+        let mut contents = String::new();
+        file_contents.read_to_string(&mut contents)?;
+        let mut ends_with_n = false;
+        if contents.ends_with("\n")  {
+            ends_with_n = true;
+        }
+        let mut file_contents:File = try!(File::open(file_name));
+
+
+        // let mut buffer = [0; 1];
+        // file_contents.seek(SeekFrom::End(-1))?;
+        // file_contents.read(&mut buffer)?;
+        // println!("dddd{:?}", buffer);
+
         let mut file = BufReader::new(file_contents);
         let mut v:Vec<Point> = Vec::new();
         let mut b:Vec<String> = Vec::new();
@@ -97,43 +121,61 @@ fn read_and_fix_temp2(file_name:&str) -> Result<(i32), Error> {
         let mut file_contents2:File = try!(File::create("/Users/PKhurana/code/Rust-Java-Import-Order/test.java"));
         //fs::copy("foo.txt", "bar.txt")?;  // Copy foo.txt to bar.txt
 use std::io::Write;
-
-        for line in file.lines() {
+use std::io::Seek;
+use std::io::SeekFrom;
+        for (num, line) in file.lines().enumerate() {
             let mut l:String = line.unwrap();
             //file_contents2.write_all(l.as_bytes());
             //file_contents2.write(b"\n").unwrap();
             //writeln!(file_contents2, l.as_bytes());
-            //println!("{}", l);
+            //println!("{}", num);
             if l.starts_with("import") {
                 let c = Point { x:l };
                 v.push(c);
                 l = String::from("222");
             } else if v.len() == 0 {
                 b.push(l);
-            } else if l.eq("\n") && a.len() == 0 {
+            } else if l.is_empty() && a.len() == 0 {
                 //println!("ignore");
             } else {
                 a.push(l);
             }
         }
 
-        println!("{:?}", v);    
+        println!("a is {:?}", a);    
         v.sort_by(Point::total_cmp);
         let v = add_new_line(v);
 
         //let mut file = BufReader::new(file_contents);
         //file_contents2.write_all(b);
-        for line2 in b {
+        // for line2 in b {
+        //     //let mut l:String = line2;
+        //     file_contents2.write_all(line2.as_bytes());
+        //     file_contents2.write(b"\n").unwrap();
+        //     //println!("{}", line2);
+        // }
+
+        for (i,line2) in b.iter().enumerate() {
             //let mut l:String = line2;
             file_contents2.write_all(line2.as_bytes());
-            file_contents2.write(b"\n").unwrap();
+            if i == b.len() -1 {
+                print!("not writing");
+            } else {
+            file_contents2.write(b"\n").unwrap();   
+            }
             //println!("{}", line2);
         }
+        if v.len() != 0 {
+            file_contents2.write(b"\n").unwrap();   
+        }
+
+
+
 
          for line2 in v {
             let mut l:String = line2.x;
             if l == "\n" {
-                print!("new line found");
+                //print!("new line found");
             }
              file_contents2.write_all(l.as_bytes());
              if l != "\n" {
@@ -141,11 +183,17 @@ use std::io::Write;
             }
              //println!("{}", line2);
          }
+        file_contents2.write(b"\n").unwrap();   
 
-        for line2 in a {
+        println!("ends with {}",ends_with_n);
+        for (i,line2) in a.iter().enumerate() {
             //let mut l:String = line2;
             file_contents2.write_all(line2.as_bytes());
+            if i == a.len() -1 && ends_with_n == false {
+                print!("not writing");
+            } else {
             file_contents2.write(b"\n").unwrap();   
+            }
             //println!("{}", line2);
         }
 
@@ -155,10 +203,13 @@ use std::io::Write;
         //v.sort_by(|a,b| a.total_cmp(b));
 
         //println!("{:?}", v);  
-        // println!("file_contents {:?}", file_contents);
+        println!("file_contents {:?}", file_contents2);
+        println!("file_contents {:?}", file_name);
+
         // let mut s:String = String::new();
         // file_contents.read_to_string(& mut s);
         // println!("s {}", s);
+        try!(fs::rename("/Users/PKhurana/code/Rust-Java-Import-Order/test.java", file_name));
         Ok(2)
 }
 
@@ -239,7 +290,13 @@ impl Point {
          //println!("{} {} {} {}",self.x, selfi, rhs.x, rhsi);
 
          if selfi == rhsi {
-             self.x.cmp(&rhs.x)
+             if self.x.starts_with(&rhs.x[..rhs.x.len()-1]) {
+                 Ordering::Greater
+             } else  if rhs.x.starts_with(&self.x[..self.x.len()-1]) {
+                 Ordering::Less
+             } else {
+                self.x.cmp(&rhs.x)
+             }
          } else {
              selfi.cmp(&rhsi)
          }
