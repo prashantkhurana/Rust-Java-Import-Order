@@ -1,4 +1,6 @@
 
+pub mod file_contents;
+
 use std::fs;
 use std::fs::ReadDir;
 use std::fs::DirEntry;
