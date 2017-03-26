@@ -1,3 +1,5 @@
+
+
 # Rust-Java-Import-Order
 
 Re-organize the import statements of java files in a given folder.  
@@ -10,6 +12,11 @@ The imports are organized in the following order :
 	 - imports starting with "org"
 	 - imports starting with "com"
 	 - all other imports 
+
+
+You can download the binary from [here](Rust-Java-Import-Order) and run the project as follows 
+
+./Rust-Java-Import-Order absolute_path_of_folder
 
 Same as what you can do in intellij by : code->Organize Imports.
 

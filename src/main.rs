@@ -22,7 +22,7 @@ fn main() {
         }
     }
 
-    println!("running over{}",folder_path);
+    println!("running over  {}",folder_path);
     match fix_import_order(&folder_path) {
         Ok(_) => print!("works!"),
         Err(s) => print!("error {}", s)
