@@ -8,21 +8,32 @@ use std::io::BufReader;
 use std::io::BufRead;
 use file::file_contents::LineOfCode;
 use std::io::Write;
+use std::env::args;
+use std::process;
 
 
 fn main() {
-    match fix_import_order() {
+    let folder_path;
+    match args().nth(1)  {
+        Some(x) => folder_path = x ,
+        None => {
+            print!("Please pass the path of the folder to run on as an argument");
+            process::exit(1);
+        }
+    }
+
+    println!("running over{}",folder_path);
+    match fix_import_order(&folder_path) {
         Ok(_) => print!("works!"),
         Err(s) => print!("error {}", s)
     };
     // for running for an individual file
     //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-serviceLayer/src/main/java/com/dstillery/duffman/converter/BidSummaryConverter.java");
-    ()
 }
 
-fn fix_import_order() -> Result<(i32), Error> {
+fn fix_import_order(folder_path : &str) -> Result<(i32), Error> {
     let file_names:Vec<String> = Vec::new();
-    let file_names:Vec<String> = file::get_file_names_in_directory3("/Users/PKhurana/opt/m6d/adserv-a1", file_names).unwrap();
+    let file_names:Vec<String> = file::get_file_names_in_directory3(folder_path, file_names).unwrap();
     println!("final paths of all files {:?}", file_names);
 
     for file_name in file_names {

@@ -12,7 +12,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Cargo &lt;Rust-Java-Import-Order&gt;" level="project" />
     <orderEntry type="library" name="Rust &lt;Rust-Java-Import-Order&gt;" level="project" />
-    <orderEntry type="library" name="Cargo &lt;rust_java_import_order&gt;" level="project" />
     <orderEntry type="library" name="Rust &lt;rust_java_import_order&gt;" level="project" />
+    <orderEntry type="library" name="Cargo &lt;rust_java_import_order&gt;" level="project" />
   </component>
 </module>
