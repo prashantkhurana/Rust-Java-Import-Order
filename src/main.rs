@@ -59,7 +59,7 @@ fn read_file_and_fix_import(file_name:&str) -> Result<(i32), Error> {
         let mut b:Vec<String> = Vec::new();
         let mut a:Vec<String> = Vec::new();
 
-        let mut file_contents2:File = try!(File::create("/Users/PKhurana/code/Rust-Java-Import-Order/test.java"));
+        let mut file_contents2:File = try!(File::create("/tmp/RustImportThrowaway.java"));
 
         for line in file.lines() {
             let l:String = line.unwrap();
@@ -118,7 +118,7 @@ fn read_file_and_fix_import(file_name:&str) -> Result<(i32), Error> {
         println!("file_contents {:?}", file_contents2);
         println!("file_contents {:?}", file_name);
 
-        try!(fs::rename("/Users/PKhurana/code/Rust-Java-Import-Order/test.java", file_name));
+        try!(fs::rename("/tmp/RustImportThrowaway.java", file_name));
         Ok(1)
 }
 
