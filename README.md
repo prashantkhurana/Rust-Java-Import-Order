@@ -1,8 +1,17 @@
 # Rust-Java-Import-Order
 
-Reformats the import statements of java files in a given folder. 
+Re-organize the import statements of java files in a given folder.  
 
-Same as what you can do in intellij by : code->Organize Imports. 
+The imports are organized in the following order : 
+
+- All static imports 
+	 - imports starting with "java"
+	 - imports starting with "javax"
+	 - imports starting with "org"
+	 - imports starting with "com"
+	 - all other imports 
+
+Same as what you can do in intellij by : code->Organize Imports.
 
 So then why write a rust program to do that? Because why not!
 
@@ -10,8 +19,8 @@ Still a few reasons :
 
  1. A way to learn rust. This was my first rust program. I chose the problem statement of organizing imports of every file in a folder because : 
 
- - The project I wanted to perform the operation on has over 1000 java files. So I can't do that individually over each file. 
- - Writing a import formatter meant,  I need know how to read and write files and how to do custom sorting. 
+ - The project I wanted to perform the operation on has over 1000 java files. So I can't do that individually over each file using intellij. 
+ - Writing a import organizer meant,  I need know how to read and write files and how to do custom sorting. 
  
  2. The problem wasn't a simple one but also not a difficult one. That meant it was challenging throughout but also not so much that I give up.   
 
