@@ -29,7 +29,7 @@ Still a few reasons :
  - The project I wanted to perform the operation on has over 1000 java files. So I can't do that individually over each file using intellij. 
  - Writing a import organizer meant,  I need know how to read and write files and how to do custom sorting. 
  
- 2. The problem wasn't a simple one but also not a difficult one. That meant it was challenging throughout but also not so much that I give up.   
+ 2. The problem had right balance of difficulty and fun. That meant it was challenging throughout but also not so much that I give up.   
 
 The flow of the program is :
 
@@ -44,4 +44,4 @@ The flow of the program is :
 	 - all other imports
  - Insert the before import, sorted import and after import statements. 
 
-There are SO MANY optimizations that can be done in the code and it can be written in a much cleaner way. 
+There are SO MANY optimizations that can be done in the code and it can be written in a much cleaner way. Feel free to send PR's/open issues. 
