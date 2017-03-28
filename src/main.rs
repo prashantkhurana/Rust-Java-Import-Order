@@ -28,7 +28,7 @@ fn main() {
         Err(s) => print!("error {}", s)
     };
     // for running for an individual file
-    //read_and_fix_temp2("/Users/PKhurana/opt/m6d/adserv-a1/adserv-serviceLayer/src/main/java/com/dstillery/duffman/converter/BidSummaryConverter.java");
+    //read_and_fix_temp2("/tmp/RustImportThrowaway.java");
 }
 
 fn fix_import_order(folder_path : &str) -> Result<(i32), Error> {
