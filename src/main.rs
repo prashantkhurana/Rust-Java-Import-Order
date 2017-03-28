@@ -33,7 +33,7 @@ fn main() {
 
 fn fix_import_order(folder_path : &str) -> Result<(i32), Error> {
     let file_names:Vec<String> = Vec::new();
-    let file_names:Vec<String> = file::get_file_names_in_directory3(folder_path, file_names).unwrap();
+    let file_names:Vec<String> = file::get_file_names_in_directory(folder_path, file_names).unwrap();
     println!("final paths of all files {:?}", file_names);
 
     for file_name in file_names {
